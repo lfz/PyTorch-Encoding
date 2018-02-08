@@ -39,12 +39,12 @@ class _dilatedavgpool2d(Function):
         with torch.cuda.device_of(input):
             output = input.new(b,c,oh,ow)
         ctx.save_for_backward(input)
-        if isinstance(input, torch.cuda.FloatTensor):
+        if isinstance(input.data, torch.cuda.FloatTensor):
             with torch.cuda.device_of(input):
                 encoding_lib.Encoding_Float_DilatedAvgPool2d_Forward(input, output,
                     ctx.kH, ctx.kW, ctx.dH, ctx.dW, ctx.padH, ctx.padW,
                     ctx.dilationH, ctx.dilationW)
-        elif isinstance(input, torch.cuda.DoubleTensor):
+        elif isinstance(input.data, torch.cuda.DoubleTensor):
             with torch.cuda.device_of(input):
                 encoding_lib.Encoding_Double_DilatedAvgPool2d_Forward(input, output,
                     ctx.kH, ctx.kW, ctx.dH, ctx.dW, ctx.padH, ctx.padW,

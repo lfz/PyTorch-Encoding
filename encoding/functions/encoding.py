@@ -26,10 +26,10 @@ class _aggregate(Function):
         D = X.size(2)
         with torch.cuda.device_of(A):
             E = A.new(B,K,D)
-        if isinstance(A, torch.cuda.FloatTensor):
+        if isinstance(A.data, torch.cuda.FloatTensor):
             with torch.cuda.device_of(A):
                 encoding_lib.Encoding_Float_aggregate_forward(E, A, X, C)
-        elif isinstance(A, torch.cuda.DoubleTensor):
+        elif isinstance(A.data, torch.cuda.DoubleTensor):
             with torch.cuda.device_of(A):
                 encoding_lib.Encoding_Double_aggregate_forward(E, A, X, C)
         else:
@@ -87,10 +87,10 @@ class _scaledL2(Function):
         K = C.size(0)
         with torch.cuda.device_of(X):
             SL = X.new(B,N,K)
-        if isinstance(X, torch.cuda.FloatTensor):
+        if isinstance(X.data, torch.cuda.FloatTensor):
             with torch.cuda.device_of(X):
                 encoding_lib.Encoding_Float_scaledl2_forward(SL, X, C, S)
-        elif isinstance(X, torch.cuda.DoubleTensor):
+        elif isinstance(X.data, torch.cuda.DoubleTensor):
             with torch.cuda.device_of(X):
                 encoding_lib.Encoding_Double_scaledl2_forward(SL, X, C, S)
         else:

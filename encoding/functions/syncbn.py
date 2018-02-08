@@ -24,11 +24,11 @@ class _sum_square(Function):
         with torch.cuda.device_of(input):
             xsum    = input.new().resize_(C).zero_()
             xsquare = input.new().resize_(C).zero_()
-        if isinstance(input, torch.cuda.FloatTensor):
+        if isinstance(input.data, torch.cuda.FloatTensor):
             with torch.cuda.device_of(input):
                 encoding_lib.Encoding_Float_sum_square_Forward(
                     input.view(B,C,-1), xsum, xsquare)
-        elif isinstance(input, torch.cuda.DoubleTensor):
+        elif isinstance(input.data, torch.cuda.DoubleTensor):
             with torch.cuda.device_of(input):
                 encoding_lib.Encoding_Double_sum_square_Forward( 
                     input.view(B,C,-1), xsum, xsquare)
@@ -41,11 +41,11 @@ class _sum_square(Function):
         B,C,H,W = input.size()
         with torch.cuda.device_of(input):
             gradInput = input.new().resize_(B,C,H*W).zero_()
-        if isinstance(input, torch.cuda.FloatTensor):
+        if isinstance(input.data, torch.cuda.FloatTensor):
             with torch.cuda.device_of(input):
                 encoding_lib.Encoding_Float_sum_square_Backward(
                     gradInput, input.view(B,C,-1), gradSum, gradSquare)
-        elif isinstance(input, torch.cuda.DoubleTensor):
+        elif isinstance(input.data, torch.cuda.DoubleTensor):
             with torch.cuda.device_of(input):
                 encoding_lib.Encoding_Double_sum_square_Backward( 
                     gradInput, input.view(B,C,-1), gradSum, gradSquare)
@@ -72,11 +72,11 @@ class _batchnorm(Function):
         with torch.cuda.device_of(input):
             invstd = 1.0 / std
             output = input.new().resize_as_(input)
-        if isinstance(input, torch.cuda.FloatTensor):
+        if isinstance(input.data, torch.cuda.FloatTensor):
             with torch.cuda.device_of(input):
                 encoding_lib.Encoding_Float_batchnorm_Forward(output, 
                     input, mean, invstd, gamma, beta)
-        elif isinstance(input, torch.cuda.DoubleTensor):
+        elif isinstance(input.data, torch.cuda.DoubleTensor):
             with torch.cuda.device_of(input):
                 encoding_lib.Encoding_Double_batchnorm_Forward(output, 
                     input, mean, invstd, gamma, beta)
@@ -94,13 +94,13 @@ class _batchnorm(Function):
             gradMean  = gradOutput.new().resize_as_(mean).zero_()
             gradStd   = gradOutput.new().resize_as_(std).zero_()
 
-        if isinstance(input, torch.cuda.FloatTensor):
+        if isinstance(input.data, torch.cuda.FloatTensor):
             with torch.cuda.device_of(input):
                 encoding_lib.Encoding_Float_batchnorm_Backward(
                     gradOutput, input, gradInput, gradGamma, gradBeta, 
                     mean, invstd, gamma, beta, gradMean, gradStd,
                     self.training) 
-        elif isinstance(input, torch.cuda.DoubleTensor):
+        elif isinstance(input.data, torch.cuda.DoubleTensor):
             with torch.cuda.device_of(input):
                 encoding_lib.Encoding_Double_batchnorm_Backward(
                     gradOutput, input, gradInput, gradGamma, gradBeta, 
